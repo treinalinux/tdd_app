@@ -1,5 +1,8 @@
 require 'rails_helper'
 
-RSpec.feature "Welcomes", type: :feature do
-  pending "add some scenarios (or delete) #{__FILE__}"
+feature 'Welcomes', type: :feature do
+  scenario 'Show a message of Welcome' do
+    visit('/')
+    expect(page).to have_content('Welcome')
+  end
 end
