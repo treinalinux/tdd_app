@@ -6,6 +6,10 @@ class CustomersController < ApplicationController
     @customer = Customer.new
   end
 
+  def show
+    @customer = Customer.find(params[:id])
+  end
+
   def create
     @customer = Customer.new(customer_params)
 
@@ -14,10 +18,15 @@ class CustomersController < ApplicationController
     else
       render :new
     end
+  end
 
-    private
-    def customer_params
-      params.require(:customer).permit(:id, :name, :email, :smoker, :phone, :avatar)
-    end
+  private
+
+  def set_customer
+    @customer = Customer.find(params[:id])
+  end
+
+  def customer_params
+    params.require(:customer).permit(:id, :name, :email, :smoker, :phone, :avatar)
   end
 end

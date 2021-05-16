@@ -27,10 +27,29 @@ RSpec.feature "Customers", type: :feature do
     fill_in('Email', with: Faker::Internet.email)
     fill_in('Phone', with: Faker::PhoneNumber.phone_number)
     attach_file('customer_avatar', "#{Rails.root}/spec/fixtures/avatar.png")
-    choose(option: %w[Y No].sample)
+    choose(option: %w[Y N].sample)
     click_on('Register Customer')
 
     expect(page).to have_content('Customer successfully registered!')
     expect(Customer.last.name).to eq(customer_name)
+  end
+
+  scenario 'Do not register an invalid customer' do
+    visit(new_customer_path)
+    click_on('Register Customer')
+    expect(page).to have_content("can't be blank")
+  end
+
+  scenario 'Show a customer' do
+    customer = Customer.create!(
+      name: Faker::Name.name,
+      email: Faker::Internet.email,
+      phone: Faker::PhoneNumber.phone_number,
+      smoker: %w[Y N].sample,
+      avatar: "#{Rails.root}/spec/fixtures/avatar.png"
+    )
+
+    visit(customer_path(customer.id))
+    expect(page).to have_content(customer.name)
   end
 end
